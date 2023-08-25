@@ -1,0 +1,27 @@
+[
+  {
+    "path": "/",
+    "name": "Dashboard",
+    "icon": "MdHome"
+  },
+  {
+    "path": "/pos",
+    "name": "POS",
+    "icon": "MdShoppingCart"
+  },
+  {
+    "path": "/users",
+    "name": "Users",
+    "icon": "FaUser"
+  },
+  {
+    "path": "/categories",
+    "name": "Categories",
+    "icon": "MdCategory"
+  },
+  {
+    "path": "/items",
+    "name": "Items",
+    "icon": "MdFastfood"
+  }
+]
