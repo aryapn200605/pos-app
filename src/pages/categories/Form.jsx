@@ -1,20 +1,39 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { alert } from "../../components/Toast";
 
 const Form = () => {
+  const [categoryName, setCategoryName] = useState('')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      await axios.post(`http://localhost:3030/category/`, {
+        name: categoryName
+      })
+      alert("Berhasil!", "Category Berhasil Di Tambahkan!", "success");
+      setCategoryName('')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
-    <form className="grid gap-6 mb-6">
+    <form className="grid gap-6 mb-6" onSubmit={handleSubmit}>
       <div>
         <label
           htmlFor="category_name"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Category Name
+          Create New Category
         </label>
         <input
           type="text"
           id="category_name"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           placeholder="Category Name"
+          value={categoryName}
+          onChange={(e) => setCategoryName(e.target.value)}
           required
         />
       </div>

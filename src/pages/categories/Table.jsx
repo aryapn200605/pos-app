@@ -1,64 +1,6 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
-
-const data = [
-  {
-    id: 1,
-    name: 'Apple MacBook Pro 17"',
-  },
-  {
-    id: 2,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 3,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 4,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 5,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 6,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 7,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 8,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 9,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 10,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 11,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 12,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 13,
-    name: "Microsoft Surface Pro",
-  },
-  {
-    id: 14,
-    name: "Microsoft Surface Pro",
-  },
-];
 
 const component = [
   { id: "id", title: "ID", hidden: true },
@@ -66,7 +8,21 @@ const component = [
 ];
 
 const Tables = () => {
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // Halaman saat ini
+
+  useEffect(() => {
+    fetchData()
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3030/category`)
+      setData(response.data)  
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // Pagination
   const itemsPerPage = 5;
