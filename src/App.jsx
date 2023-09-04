@@ -6,6 +6,7 @@ import Users from "./pages/Users";
 import Items from "./pages/Items";
 import PageNotFound from "./pages/PageNotFound";
 import Categories from "./pages/categories/Page";
+import Products from "./pages/products/Page";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/users" element={<Users />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/items" element={<Items />} />
+          <Route path="/products" element={<Products />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>

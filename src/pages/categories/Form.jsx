@@ -8,7 +8,7 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.post(`http://localhost:3030/category/`, {
+      await axios.post(`http://192.168.18.93:3030/category/`, {
         name: categoryName
       })
       alert("Berhasil!", "Category Berhasil Di Tambahkan!", "success");

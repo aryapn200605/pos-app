@@ -23,5 +23,10 @@
     "path": "/items",
     "name": "Items",
     "icon": "MdFastfood"
+  },
+  {
+    "path": "/products",
+    "name": "Products",
+    "icon": "MdFastfood"
   }
 ]

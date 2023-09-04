@@ -15,19 +15,19 @@ const Home = () => {
     setActiveButton(title);
 
     if (title === "All") {
-      const response = await axios.get("http://localhost:3030/item");
+      const response = await axios.get("http://192.168.18.93:3030/produk");
       setItems(response.data);
     } else {
       const response = await axios.get(
-        `http://localhost:3030/item/category/${title}`
+        `http://192.168.18.93:3030/produk/category/${title}`
       );
       setItems(response.data);
     }
   };
 
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:3030/item");
-    setItems(response.data);
+    const responseItem = await axios.get("http://192.168.18.93:3030/produk");
+    setItems(responseItem.data);
   };
 
   useEffect(() => {

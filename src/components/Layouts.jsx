@@ -8,7 +8,7 @@ import {
   MdHome,
 } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom"; // Import useLocation
+import { Link, useLocation } from "react-router-dom";
 import sidebarData from "../assets/json/sidebar.json";
 
 const iconMap = {
@@ -21,7 +21,7 @@ const iconMap = {
 };
 
 const Layouts = ({ children }) => {
-  const location = useLocation(); // Get the current location
+  const location = useLocation();
 
   return (
     <>
@@ -42,7 +42,7 @@ const Layouts = ({ children }) => {
           <ul className="space-y-2 font-medium mt-5">
             {sidebarData.map((item, index) => {
               const IconComponent = iconMap[item.icon];
-              const isActive = location.pathname === item.path; // Check if the item is active
+              const isActive = location.pathname === item.path;
               return (
                 <li key={index}>
                   <Link
@@ -68,13 +68,12 @@ const Layouts = ({ children }) => {
         </div>
       </aside>
 
-      <div className="ml-24">
+      <div className="ml-24 overflow-y-auto">
         <div className="p-4 dark:border-gray-700">
           <div className="mb-2 flex justify-between items-center">
             <p className="text-black font-semibold py-1 text-2xl">
               Toko Kafe Kita Bersama
             </p>
-
             <div className="flex items-center">
               <p className="flex bg-gray-400 text-white font-semibold py-3 px-4 mr-2">
                 <FaUser className="m-auto mr-2" />

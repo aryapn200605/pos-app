@@ -7,9 +7,9 @@ const Page = () => {
   return (
     <>
       <Layouts>
-        <div className="overflow-hidden">
+        <div className="overflow-auto">
           <div className="bg-white mb-4 p-4">
-            <h2 className="text-4xl font-bold">Category</h2>
+            <h2 className="text-4xl font-bold">Product</h2>
             <hr className="my-4" />
             <Form />
           </div>

@@ -4,7 +4,10 @@ import { MdDelete, MdEdit } from "react-icons/md";
 
 const component = [
   { id: "id", title: "ID", hidden: true },
-  { id: "name", title: "Name" },
+  { id: "title", title: "Title" },
+  { id: "description", title: "Description" },
+  { id: "price", title: "Price" },
+  { id: "stock", title: "Stock" },
 ];
 
 const Tables = () => {
@@ -17,8 +20,9 @@ const Tables = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://192.168.18.93:3030/category`)
+      const response = await axios.get(`http://192.168.18.93:3030/produk`)
       setData(response.data)  
+      console.log(response.data)
     } catch (error) {
       console.log(error)
     }
