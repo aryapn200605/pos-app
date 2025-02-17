@@ -1,0 +1,10 @@
+@url = http://[::1]/pos-app/index.php/
+
+POST {{ url }}Auth/signUp
+Content-Type: application/json
+
+{
+    "name": "Admin",
+    "username": "Admin",
+    "password": "admin123"
+}
