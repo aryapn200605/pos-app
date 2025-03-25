@@ -38,7 +38,16 @@ class Transaction extends CI_Controller
 
         $datas = $this->TransactionModel->getTransactionData($id);
 
-        $this->load->view('page_transaction/page_transaction_pdf', ['title' => 'Transaction Detail', 'datas' => $datas['data'][0]]);
+        $this->load->view('page_transaction/page_transaction_print', ['title' => 'Transaction Detail', 'datas' => $datas['data'][0]]);
+    }
+    
+    public function print()
+    {
+        $id = $this->input->get('tb_id');
+        
+        $datas = $this->TransactionModel->getTransactionData($id);
+        
+        $this->load->view('page_transaction/page_transaction_print', ['title' => 'Transaction Detail', 'datas' => $datas['data'][0]]);
     }
 
     public function deleteTransaction()
@@ -46,5 +55,26 @@ class Transaction extends CI_Controller
         $result = $this->TransactionModel->deleteTransaction();
 
         echo json_encode($result);
+    }
+
+    public function addPayment()
+    {
+        $param = $this->input->post();
+
+        $invoiceData = array(
+            'paid_amount'       => $param['amount'],
+            'payment_method'    => $param['payment_method'],
+            'status'            => 0,
+            'created_at'        => date('Y-m-d H:i:s'),
+            'created_by'        => $this->session->user_id
+        );
+
+        $result = $this->TransactionModel->createInvoice($param['tb_id'], $invoiceData);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Success']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed']);
+        }
     }
 }

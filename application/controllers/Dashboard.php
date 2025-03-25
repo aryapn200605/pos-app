@@ -6,12 +6,15 @@ class Dashboard extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(array());
+        $this->load->model(array('TransactionModel'));
     }
 
     public function index()
     {
         is_authenticated();
-        $this->load->view('page_dashboard/page_dashboard_index', ['title' => 'Dashboard']);
+
+        $datas = $this->TransactionModel->getDashboardData();
+
+        $this->load->view('page_dashboard/page_dashboard_index', ['title' => 'Dashboard', 'data' => $datas]);
     }
 }

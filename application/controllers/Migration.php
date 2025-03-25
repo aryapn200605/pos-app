@@ -6,6 +6,7 @@ class Migration extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        ob_start();
 
         $key = $this->input->get('key');
         if ($key != '200605APN@id') {
@@ -18,7 +19,7 @@ class Migration extends CI_Controller
 
     public function resetTable()
     {
-        $response = json_encode(['result' => false, 'message' => 'Error while creating Table']);
+        $errors = [];
 
         // Tabel `users`
         $this->dbforge->add_field([
@@ -51,12 +52,13 @@ class Migration extends CI_Controller
             ],
             'created_at' => [
                 'type' => 'TIMESTAMP',
-            ],
+                'null' => TRUE,
+            ]
         ]);
         $this->dbforge->add_key('id', TRUE);
 
         if ($this->dbforge->create_table('users', TRUE)) {
-            echo $response;
+            $errors[] = 'Error while creating table: users';
         }
 
         // Tabel `transaction`
@@ -91,7 +93,7 @@ class Migration extends CI_Controller
         $this->dbforge->add_key('id', TRUE);
 
         if ($this->dbforge->create_table('transaction', TRUE)) {
-            echo $response;
+            $errors[] = 'Error while creating table: transaction';
         }
 
         // Tabel `transaction_batch`
@@ -130,6 +132,7 @@ class Migration extends CI_Controller
             ],
             'created_at' => [
                 'type' => 'TIMESTAMP',
+                'null' => TRUE,
             ],
             'created_by' => [
                 'type' => 'CHAR',
@@ -139,7 +142,7 @@ class Migration extends CI_Controller
         $this->dbforge->add_key('id', TRUE);
 
         if ($this->dbforge->create_table('transaction_batch', TRUE)) {
-            echo $response;
+            $errors[] = 'Error while creating table: transaction_batch';
         }
 
         // Tabel `invoice`
@@ -173,6 +176,7 @@ class Migration extends CI_Controller
             ],
             'created_at' => [
                 'type' => 'TIMESTAMP',
+                'null' => TRUE,
             ],
             'created_by' => [
                 'type' => 'INT',
@@ -182,7 +186,7 @@ class Migration extends CI_Controller
         $this->dbforge->add_key('id', TRUE);
 
         if ($this->dbforge->create_table('invoice', TRUE)) {
-            echo $response;
+            $errors[] = 'Error while creating table: invoice';
         }
 
         // Tabel `payment_method`
@@ -205,7 +209,7 @@ class Migration extends CI_Controller
         $this->dbforge->add_key('id', TRUE);
 
         if ($this->dbforge->create_table('payment_method', TRUE)) {
-            echo $response;
+            $errors[] = 'Error while creating table: payment_method';
         }
 
         // Tabel `progress_status`
@@ -228,10 +232,16 @@ class Migration extends CI_Controller
         $this->dbforge->add_key('id', TRUE);
 
         if ($this->dbforge->create_table('progress_status', TRUE)) {
-            echo $response;
+            $errors[] = 'Error while creating table: progress_status';
         }
 
-        echo json_encode(['result' => true, 'message' => 'Table has successfully reset']);
+        if (!empty($errors)) {
+            echo json_encode(['result' => false, 'errors' => $errors]);
+            return;
+        }
+    
+        // Jika sukses semua
+        echo json_encode(['result' => true, 'message' => 'All tables have been successfully created']);
     }
 
     public function seed()
@@ -280,6 +290,10 @@ class Migration extends CI_Controller
         );
 
         $progressStatus = array(
+            array(
+                'name'      => 'Cancel',
+                'is_deleted' => 0
+            ),
             array(
                 'name'      => 'Progress',
                 'is_deleted' => 0

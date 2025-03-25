@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: ci3_app
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - C:/Program-project/pos-app:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+
+  db:
+    image: mysql:5.7
+    container_name: mysql_container
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"  # Mengizinkan login tanpa password
+      MYSQL_DATABASE: pos-app
+      MYSQL_USER: ci_user
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

@@ -10,9 +10,6 @@ class ProgressStatusModel extends CI_Model
             ->where('is_deleted', 0)
             ->get()->result();
 
-        // if ($datas) {
-
-        // }
         return $datas;
     }
 
@@ -32,5 +29,15 @@ class ProgressStatusModel extends CI_Model
         }
         $this->db->where('id', $id);
         return $this->db->update('progress_status', ['name' => $name]);
+    }
+
+    public function changeStatus($tb_id, $status)
+    {
+        if (!$tb_id || !$status) {
+            return false;
+        }
+
+        $this->db->where('id', $tb_id);
+        return $this->db->update('transaction_batch', ['status' => $status]);
     }
 }

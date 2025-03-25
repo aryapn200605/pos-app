@@ -36,13 +36,17 @@ if (!function_exists('badgeProgressStatus')) {
         switch ($val) {
             case 'Done':
                 echo 'success';
+                break;
             case 'Cancel':
                 echo 'danger';
+                break;
             default:
                 echo 'warning';
+                break;
         }        
     }    
 }
+
 
 if (!function_exists('is_authenticated')) {
     function is_authenticated()

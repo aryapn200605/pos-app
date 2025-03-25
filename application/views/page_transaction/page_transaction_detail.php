@@ -1,6 +1,8 @@
 <?php $this->load->view('page_transaction/page_transaction_js'); ?>
 
 <input type="hidden" value="<?= $datas['tb_id'] ?>" id="detail_id">
+<input type="hidden" value="<?= $datas['grand_price'] ?>" id="grand_price">
+<input type="hidden" value="<?= $datas['total_paid'] ?>" id="total_paid">
 <div class="row">
     <div class="col-7">
         <div class="card">
@@ -98,12 +100,75 @@
                             <button class="btn btn-primary btn-sm m-1" id="btn-pdf">Download PDF</button>
                             <button class="btn btn-success btn-sm m-1" id="btn-print">Print</button>
                             <button class="btn btn-danger btn-sm m-1" id="btn-delete">Delete</button>
-                            <button class="btn btn-primary btn-sm m-1">Add Payment</button>
-                            <button class="btn btn-primary btn-sm m-1">Change Progress Status</button>
-                            <button class="btn btn-primary btn-sm m-1">Download PDF</button>
+                            <?php if ($datas['total_paid'] != $datas['grand_price']) : ?>
+                            <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#modal-add-payment">Add Payment</button>
+                            <?php endif; ?>
+                            <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#modal-change-status">Change Progress Status</button>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-add-payment" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class=" col-12 mb-2">
+                        <label>Payment Amount</label>
+                        <input type="number" class="form-control form-control-sm" id="add_payment_amount" placeholder="Payment Amount">
+                        <i><span class="text-muted" id="payment-amount-idr">Rp. 0</span></i>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label for="payment_method">Payment Method</label>
+                        <select class="form-control form-control-sm" id="payment_method" name="payment_method">
+                            <option value="" selected disabled>Select Payment Method</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btn-add-payment">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-change-status" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <label for="progress_status">Progress Status</label>
+                        <select class="form-control form-control-sm" id="progress_status" name="progress_status">
+                            <option value="" selected disabled>Select Progress Status</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btn-change-status"">Save changes</button>
             </div>
         </div>
     </div>

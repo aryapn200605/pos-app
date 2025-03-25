@@ -51,7 +51,6 @@ class TransactionModel extends CI_Model
         } else {
             return false;
         }
-
     }
 
     public function createInvoice($batchId, $datas)
@@ -93,6 +92,13 @@ class TransactionModel extends CI_Model
             'recordsFiltered'   => 0,
             'data'              => []
         );
+
+        // Limiting for Pagination
+        if (isset($param['start']) && isset($param['length'])) {
+            $batch_ids = $this->db->select('tb.id')->from('transaction_batch tb')->where('tb.is_deleted', 0)->limit($param['length'], $param['start'])->get()->result_array();
+            $batch_ids = array_column($batch_ids, 'id');
+            $this->db->reset_query();
+        }
 
         // Get Count All Data
         $recordTotal = $this->db->query("SELECT COUNT(id) AS total FROM transaction_batch WHERE is_deleted = 0")->row();
@@ -148,8 +154,19 @@ class TransactionModel extends CI_Model
 
         if (!empty($param['payment_method'])) {
             $this->db->group_start();
-            $this->db->where_in('i.payment_method', [$param['payment_method']]);
+            $this->db->where_in('i.created_by', [$param['payment_method']]);
             $this->db->group_end();
+        }
+
+        if (!empty($param['select_cashier'])) {
+            $this->db->group_start();
+            $this->db->where_in('i.payment_method', [$param['select_cashier']]);
+            $this->db->group_end();
+        }
+
+        // Limiting for Pagination
+        if (isset($param['start']) && isset($param['length'])) {
+            $this->db->where_in('tb.id', $batch_ids);
         }
 
         if (!empty($param['payment_status'])) {
@@ -202,12 +219,8 @@ class TransactionModel extends CI_Model
             }
         }
 
-        // Limiting for Pagination
-        if (isset($param['start']) && isset($param['length'])) {
-            $this->db->limit($param['length'], $param['start']);
-        }
-
         $data = $this->db->get()->result();
+
         $result['data'] = $this->formatData($data);
 
         return $result;
@@ -230,12 +243,11 @@ class TransactionModel extends CI_Model
     private function formatData($array = [])
     {
         $nestedResult = [];
-        $tb_id = 0;
 
         foreach ($array as $row) {
-            if ($row->tb_id != $tb_id) {
-                $tb_id = $row->tb_id;
+            $index = array_search($row->tb_id, array_column($nestedResult, 'tb_id'));
 
+            if ($index === false) {
                 $nestedResult[] = [
                     'tb_id'             => $row->tb_id,
                     'order_id'          => $row->order_id,
@@ -252,19 +264,12 @@ class TransactionModel extends CI_Model
                     'grand_price'       => 0,
                     'total_paid'        => 0
                 ];
+                $index = count($nestedResult) - 1;
             }
 
-            $index = count($nestedResult) - 1;
+            $transactionExists = array_search($row->t_id, array_column($nestedResult[$index]['transaction'], 't_id'));
 
-            $transactionExists = false;
-            foreach ($nestedResult[$index]['transaction'] as $transaction) {
-                if ($transaction['t_id'] == $row->t_id) {
-                    $transactionExists = true;
-                    break;
-                }
-            }
-
-            if (!$transactionExists) {
+            if ($transactionExists === false) {
                 $nestedResult[$index]['grand_price'] += $row->total_price;
 
                 $nestedResult[$index]['transaction'][] = [
@@ -276,15 +281,9 @@ class TransactionModel extends CI_Model
                 ];
             }
 
-            $invoiceExists = false;
-            foreach ($nestedResult[$index]['invoice'] as $invoice) {
-                if ($invoice['i_id'] == $row->i_id) {
-                    $invoiceExists = true;
-                    break;
-                }
-            }
+            $invoiceExists = array_search($row->i_id, array_column($nestedResult[$index]['invoice'], 'i_id'));
 
-            if (!$invoiceExists) {
+            if ($invoiceExists === false) {
                 $nestedResult[$index]['total_paid'] += $row->paid_amount;
 
                 $nestedResult[$index]['invoice'][] = [
@@ -299,5 +298,36 @@ class TransactionModel extends CI_Model
         }
 
         return $nestedResult;
+    }
+
+    public function getDashboardData()
+    {
+        $result = array(
+            'active_order' => 0,
+            'done_order' => 0,
+            'canceled_order' => 0,
+            'omzet' => 0,
+            'done_payment' => 0,
+            'undone_payment' => 0
+        );
+
+        $query = $this->db->query('SELECT COUNT(tb.status) AS total FROM transaction_batch tb WHERE tb.status != 5 AND tb.status != 6');
+        $result['active_order'] = $query->row()->total;
+        
+        $query = $this->db->query('SELECT COUNT(tb.status) AS total FROM transaction_batch tb WHERE tb.status = 5');
+        $result['done_order'] = $query->row()->total;
+
+        $query = $this->db->query('SELECT COUNT(tb.status) AS total FROM transaction_batch tb WHERE tb.status = 6');
+        $result['canceled_order'] = $query->row()->total;
+        
+        $query = $this->db->query('SELECT SUM(t.total_price) AS total FROM transaction_batch tb LEFT JOIN transaction t ON t.batch_id = tb.id WHERE tb.status != 6');
+        $result['omzet'] = $query->row()->total;
+
+        $query = $this->db->query('SELECT SUM(i.paid_amount) AS total FROM transaction_batch tb LEFT JOIN invoice i ON i.batch_id = tb.id WHERE tb.status != 6');
+        $result['done_payment'] = $query->row()->total;
+
+        $result['undone_payment'] = $result['omzet'] - $result['done_payment'];        
+
+        return $result;
     }
 }

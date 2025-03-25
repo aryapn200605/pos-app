@@ -46,4 +46,17 @@ class ProgressStatus extends CI_Controller
             echo json_encode(array('result' => false, 'message' => 'Error while Created Payment Method'));
         }
     }
+
+    public function changeStatus()
+    {
+        $param = $this->input->post();
+
+        $result = $this->ProgressStatusModel->changeStatus($param['tb_id'], $param['status']);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Success']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed']);
+        }
+    }
 }

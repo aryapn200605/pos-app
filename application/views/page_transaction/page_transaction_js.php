@@ -16,6 +16,7 @@
                         transaction_date: $('#transaction_date').val() || '',
                         progress_status: $('#progress_status').val() || '',
                         payment_status: $('#payment_status').val() || '',
+                        select_cashier: $('#select_cashier').val() || '',
                         item: $('#item').val() || '',
                     });
                 },
@@ -108,6 +109,101 @@
             window.open(baseURL + '/Transaction/showPdf?tb_id=' + id, '_blank');
         });
 
+        $('#btn-print').on('click', function() {
+            const id = $('#detail_id').val();
+            window.open(baseURL + '/Transaction/print?tb_id=' + id, '_blank');
+        });
+
+        $('#add_payment_amount').on('input', function() {
+            const amount = $(this).val();
+            const total_paid = $('#total_paid').val();
+            const grand_price = $('#grand_price').val();
+
+            const result = parseInt(grand_price) - parseInt(total_paid);
+
+            if (parseInt(amount) > parseInt(grand_price) - parseInt(total_paid)) {
+                $(this).val(result);
+                $('#payment-amount-idr').html(numberFormater(result));
+            } else {
+                $('#payment-amount-idr').html(numberFormater(amount));
+            }
+
+        });
+
+        $('#btn-add-payment').on('click', function() {
+            const payment_method = $('#payment_method').val();
+            const amount = $('#add_payment_amount').val();
+            const id = $('#detail_id').val();
+
+            if (payment_method == '' || amount == '') {
+                showAlert('warning', 'Please fill all field');
+                return;
+            }
+
+            alertify.confirm(
+                'Add Payment Confirm', `Are you sure add this payment?`,
+                function() {
+                    $('#modal-add-payment').modal('hide');
+
+                    $.ajax({
+                        url: baseURL + "/Transaction/addPayment",
+                        type: "POST",
+                        data: {
+                            tb_id: id,
+                            payment_method: payment_method,
+                            amount: amount
+                        },
+                        success: (response) => {
+                            const res = JSON.parse(response)
+
+                            if (res.success) {
+                                app.goToModule('/Transaction/getDetail?tb_id=' + id)
+                            } else {
+                                showAlert('error', res.message)
+                            }
+                        }
+                    })
+                },
+                function() {});
+
+        });
+
+        $('#btn-change-status').on('click', function() {
+            const id = $('#detail_id').val();
+            const status = $('#progress_status').val();
+
+            if (status == '') {
+                showAlert('warning', 'Please fill all field');
+                return;
+            }
+
+            alertify.confirm(
+                'Add Payment Confirm', `Are you sure change this progress?`,
+                function() {
+                    $('#modal-change-status').modal('hide');
+
+                    $.ajax({
+                        url: baseURL + "/ProgressStatus/changeStatus",
+                        type: "POST",
+                        data: {
+                            tb_id: id,
+                            status: status
+                        },
+                        success: (response) => {
+                            const res = JSON.parse(response)
+
+                            if (res.success) {
+                                app.goToModule('/Transaction/getDetail?tb_id=' + id)
+                            } else {
+                                showAlert('error', res.message)
+                            }
+                        }
+                    })
+                },
+                function() {});
+
+        });
+
         $('#btn-delete').on('click', function() {
             const id = $('#detail_id').val();
             alertify.confirm(
@@ -164,6 +260,7 @@
 
 
         function badgeProgressStatus(status) {
+            console.log(status)
             switch (status) {
                 case 'Done':
                     return 'success';
@@ -172,6 +269,10 @@
                 default:
                     return 'warning';
             }
+        }
+
+        function numberFormater(val) {
+            return 'Rp. ' + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         }
 
     })

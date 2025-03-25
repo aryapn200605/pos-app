@@ -3,10 +3,9 @@
         <div class="info-box">
             <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">CPU Traffic</span>
+                <span class="info-box-text">Total Pesanan Berjalan</span>
                 <span class="info-box-number">
-                    10
-                    <small>%</small>
+                    <?= $data['active_order'] ?>
                 </span>
             </div>
         </div>
@@ -15,8 +14,9 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">Likes</span>
-                <span class="info-box-number">41,410</span>
+                <span class="info-box-text">Total Pesanan Selesai</span>
+                <span class="info-box-number">
+                    <?= $data['done_order'] ?></span>
             </div>
         </div>
     </div>
@@ -25,8 +25,9 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">Sales</span>
-                <span class="info-box-number">760</span>
+                <span class="info-box-text">Total Pesanan Dibatalkan</span>
+                <span class="info-box-number">
+                    <?= $data['canceled_order'] ?></span>
             </div>
         </div>
     </div>
@@ -35,8 +36,31 @@
             <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">New Members</span>
-                <span class="info-box-number">2,000</span>
+                <span class="info-box-text">Jumlah Omzet</span>
+                <span class="info-box-number">
+                    <?= numberFormatter($data['omzet']) ?></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Jumlah Yang Sudah Dibayarkan</span>
+                <span class="info-box-number">
+                    <?= numberFormatter($data['done_payment']) ?></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Jumlah Yang Belum Dibayarkan</span>
+                <span class="info-box-number">
+                    <?= numberFormatter($data['undone_payment']) ?></span>
             </div>
         </div>
     </div>
