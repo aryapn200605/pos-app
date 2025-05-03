@@ -34,12 +34,19 @@
                             ['id' => 'dashboard', 'name' => 'Dashboard', 'link' => '/dashboard', 'icon' => 'fas fa-th'],
                             ['id' => 'cashier', 'name' => 'Cashier', 'link' => '/cashier', 'icon' => 'fas fa-cash-register'],
                             ['id' => 'transaction', 'name' => 'Transaction', 'link' => '/transaction', 'icon' => 'fas fa-receipt'],
+                            ['id' => 'hpp', 'name' => 'HPP', 'link' => '/hpp', 'icon' => 'fas fa-file'],
                             ['id' => 'setting', 'name' => 'Setting', 'link' => '/setting', 'icon' => 'fas fa-cog'],
                             ['id' => 'logout', 'name' => 'Logout', 'link' => '/auth/logout', 'icon' => 'fas fa-sign-out-alt']
                         );
-                        ?>
 
-                        <?php foreach ($menu as $item): ?>
+                        foreach ($menu as $item):
+                            // Jika level bukan 3, hanya tampilkan dashboard, transaction, dan logout
+                            if ($this->session->level == 2) {
+                                if (!in_array($item['id'], ['dashboard', 'transaction', 'logout', 'hpp'])) {
+                                    continue; // lewati item yang tidak diizinkan
+                                }
+                            }
+                        ?>
                             <li class="nav-item">
                                 <a href="<?= $item['link']; ?>" class="nav-link menu" id="<?= $item['id']; ?>">
                                     <i class="nav-icon <?= $item['icon']; ?>"></i>

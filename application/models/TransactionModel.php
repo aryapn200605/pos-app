@@ -199,7 +199,8 @@ class TransactionModel extends CI_Model
             t.product_name, 
             t.total_price, 
             t.unit_price, 
-            t.quantity, 
+            t.quantity,
+            t.status AS t_status, 
             i.id AS i_id, 
             i.invoice, 
             i.paid_amount, 
@@ -278,6 +279,7 @@ class TransactionModel extends CI_Model
                     'total_price'   => $row->total_price,
                     'unit_price'    => $row->unit_price,
                     'quantity'      => $row->quantity,
+                    't_status'      => $row->t_status,
                 ];
             }
 

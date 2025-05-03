@@ -85,6 +85,11 @@ class Migration extends CI_Controller
                 'type' => 'INT',
                 'constraint' => 11,
             ],
+            'status' => [
+                'type' => 'TINYINT',
+                'constraint' => 1,
+                'default' => 0,
+            ],
             'batch_id' => [
                 'type' => 'INT',
                 'constraint' => 11,

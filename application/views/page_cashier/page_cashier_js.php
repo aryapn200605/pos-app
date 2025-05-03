@@ -5,44 +5,44 @@
         const defaultForms = ['customer_name', 'customer_phone', 'grand_total', 'deposits', 'remaining_payment', 'payment_method', 'deadline'];
         const productForm = ['product_name', 'quantity', 'unit_price', 'total_price'];
         let datas = {};
-        // let products = [];
+        let products = [];
 
-        let products = [{
-                id: 1,
-                product_name: 'Product A',
-                quantity: 10,
-                unit_price: 15000,
-                total_price: 15000 * 10
-            },
-            {
-                id: 2,
-                product_name: 'Product B',
-                quantity: 5,
-                unit_price: 25000,
-                total_price: 25000 * 5
-            },
-            {
-                id: 3,
-                product_name: 'Product C',
-                quantity: 3,
-                unit_price: 10000,
-                total_price: 10000 * 3
-            },
-            {
-                id: 4,
-                product_name: 'Product D',
-                quantity: 7,
-                unit_price: 18000,
-                total_price: 18000 * 7
-            },
-            {
-                id: 5,
-                product_name: 'Product E',
-                quantity: 8,
-                unit_price: 22000,
-                total_price: 22000 * 8
-            }
-        ];
+        // let products = [{
+        //         id: 1,
+        //         product_name: 'Product A',
+        //         quantity: 10,
+        //         unit_price: 15000,
+        //         total_price: 15000 * 10
+        //     },
+        //     {
+        //         id: 2,
+        //         product_name: 'Product B',
+        //         quantity: 5,
+        //         unit_price: 25000,
+        //         total_price: 25000 * 5
+        //     },
+        //     {
+        //         id: 3,
+        //         product_name: 'Product C',
+        //         quantity: 3,
+        //         unit_price: 10000,
+        //         total_price: 10000 * 3
+        //     },
+        //     {
+        //         id: 4,
+        //         product_name: 'Product D',
+        //         quantity: 7,
+        //         unit_price: 18000,
+        //         total_price: 18000 * 7
+        //     },
+        //     {
+        //         id: 5,
+        //         product_name: 'Product E',
+        //         quantity: 8,
+        //         unit_price: 22000,
+        //         total_price: 22000 * 8
+        //     }
+        // ];
 
         $.ajax({
             url: baseURL + '/PaymentMethod/getAllPaymentMethod',

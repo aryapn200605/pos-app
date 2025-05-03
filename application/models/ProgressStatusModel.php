@@ -40,4 +40,18 @@ class ProgressStatusModel extends CI_Model
         $this->db->where('id', $tb_id);
         return $this->db->update('transaction_batch', ['status' => $status]);
     }
+
+    public function changeStatusTransaction($ids)
+    {
+        if (empty($ids['status'])) {
+            return false;
+        }
+    
+        $this->db->where_in('id', $ids['status']);
+        $this->db->set('status', 1);
+        $this->db->update('transaction');
+    
+        return $this->db->affected_rows() > 0;
+    }
+    
 }

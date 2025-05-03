@@ -8,7 +8,6 @@
     <style>
         hr {
             margin: 0;
-            padding: 0;
         }
 
         span {
@@ -16,17 +15,10 @@
             color: #6c757d;
         }
 
-        @page {
-            size: auto;
-            margin: .5rem 0;
-        }
-
-        .invoice-box,
-        .invoice-box-second,
-        .invoice-box-third {
+        .invoice-box {
             max-width: 800px;
             margin: auto;
-            font-size: 12px;
+            font-size: 14px;
             line-height: 24px;
             font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
             color: #555;
@@ -39,7 +31,7 @@
         }
 
         .invoice-box table td {
-            padding: 0;
+            padding: 5px;
             vertical-align: top;
         }
 
@@ -105,6 +97,16 @@
             justify-content: space-between;
         }
 
+        .invoice-box-second,
+        .invoice-box-third {
+            max-width: 800px;
+            margin: auto;
+            font-size: 14px;
+            line-height: 24px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+
         .invoice-box-second table {
             width: 100%;
             /* table-layout: fixed; */
@@ -133,6 +135,11 @@
         .invoice-box-second td:first-child {
             white-space: nowrap;
         }
+
+        /* .separator {
+            width: 10px;
+            text-align: center;
+        } */
 
         /* Table Product */
         .invoice-box-third table {
@@ -169,17 +176,27 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= base_url(); ?>assets/images/logo-brand.png"
-                                    style="width: 100%; max-width: 200px" />
+                                <img src="https://sparksuite.github.io/simple-html-invoice-template/images/logo.png"
+                                    style="width: 100%; max-width: 300px" />
                             </td>
 
-                            <td style="font-size: 12px;">
+                            <td>
                                 Jl. Mayjend Ishak Djuarsa No.79, Gunungbatu, Kec. Bogor Bar.<br />
-                                Phone. 0813-1303-4683 - 
+                                Phone. 0813-1303-4683<br />
                                 Kota Bogor, Jawa Barat 16610
                             </td>
                         </tr>
                     </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="flex-container">
+                        <span><b>Bukti Pemesanan (ASLI)</b></span>
+                        <span><b>ORDER ID: 12345</b></span>
+                    </div>
+                    <hr>
                 </td>
             </tr>
         </table>
@@ -189,49 +206,43 @@
             <tr>
                 <td><b>Nama</b></td>
                 <td class="separator">:</td>
-                <td><?= $datas['customer_name'] ?></td>
+                <td>Nama Customer</td>
 
                 <td><b>Tgl Pesanan</b></td>
                 <td class="separator">:</td>
-                <td><?= $datas['created_at'] ?></td>
+                <td>20 Januari 2025</td>
             </tr>
             <tr>
                 <td><b>Nomor HP</b></td>
                 <td class="separator">:</td>
-                <td><?= $datas['customer_phone'] ?></td>
+                <td>0812131415</td>
 
                 <td><b>Tgl Selesai</b></td>
                 <td class="separator">:</td>
-                <td><?= $datas['deadline'] ?></td>
+                <td>22 Januari 2024</td>
             </tr>
-            <!-- <tr>
+            <tr>
                 <td><b>Kasir</b></td>
                 <td class="separator">:</td>
-                <td><?= $datas['cashier'] ?></td>
+                <td>Super</td>
 
                 <td><b>Status Pembayaran</b></td>
                 <td class="separator">:</td>
-                <td><?= $datas['grand_price'] == $datas['total_paid'] ? "Lunas" : "Belum Lunas" ?></td>
-            </tr> -->
-            <tr>
-                <td><b>Order ID</b></td>
-                <td class="separator">:</td>
-                <td><?= $datas['order_id'] ?></td>
-                <!-- <td><b>Status Pesanan</b></td>
-                <td class="separator">:</td>
-                <td><?= $datas['status'] ?></td> -->
+                <td>Lunas</td>
             </tr>
-            <!-- <tr>
+            <tr>
                 <td><b>Note</b></td>
                 <td class="separator">:</td>
-                <td colspan="4"><?= $datas['note'] ?></td>
-            </tr> -->
+                <td colspan="4">Ini Note yang sangat panjang dan akan wrap secara otomatis bila melebihi batas kolom.
+                    ................................................
+                </td>
+            </tr>
         </table>
     </div>
     <div class="invoice-box-third">
         <table class="invoice-table">
             <tr>
-                <td colspan="5" style="padding: 0; margin: 0;">
+                <td colspan="5">
                     <hr>
                 </td>
             </tr>
@@ -242,20 +253,28 @@
                 <td>SubTotal</td>
             </tr>
             <tr>
-                <td colspan="5" style="padding: 0; margin: 0;">
+                <td colspan="5">
                     <hr>
                 </td>
             </tr>
-            <?php foreach ($datas['transaction'] as $row) : ?>
-
-                <tr class="invoice-product">
-                    <td colspan="2"><?= $row['product_name'] ?></td>
-                    <td><?= $row['quantity'] ?></td>
-                    <td><?= numberFormatter($row['unit_price']) ?></td>
-                    <td><?= numberFormatter($row['total_price']) ?></td>
-                </tr>
-
-            <?php endforeach; ?>
+            <tr class="invoice-product">
+                <td colspan="2">Product B</td>
+                <td>3</td>
+                <td>Rp 15.000</td>
+                <td>Rp 45.000</td>
+            </tr>
+            <tr class="invoice-product">
+                <td colspan="2">Product C</td>
+                <td>1</td>
+                <td>Rp 50.000</td>
+                <td>Rp 50.000</td>
+            </tr>
+            <tr class="invoice-product">
+                <td colspan="2">Product D</td>
+                <td>5</td>
+                <td>Rp 10.000</td>
+                <td>Rp 50.000</td>
+            </tr>
             <tr>
                 <td colspan="5">
                     <hr>
@@ -263,30 +282,22 @@
             </tr>
             <tr>
                 <td colspan="4">Total Pesanan</td>
-                <td style="text-align: right;"><?= numberFormatter($datas['grand_price']) ?></td>
+                <td style="text-align: right;">Rp 145.000</td>
             </tr>
             <tr>
                 <td colspan="5">
                     <hr>
                 </td>
             </tr>
-            <?php
-            $count = count($datas['invoice']);
-            $firstRow = true;
-
-            foreach ($datas['invoice'] as $row) :
-            ?>
-
-                <tr>
-                    <?php if ($firstRow) : ?>
-                        <td rowspan="<?= $count ?>" style="vertical-align: top; width: 25%;">Riwayat Pembayaran</td>
-                        <?php $firstRow = false; ?>
-                    <?php endif; ?>
-                    <td colspan="3"><?= $row['invoice'] . " | " . $row['created_at'] . " | " . $row['payment_method'] ?></td>
-                    <td style="text-align: right;"><?= numberFormatter($row['paid_amount']) ?></td>
-                </tr>
-
-            <?php endforeach; ?>
+            <tr>
+                <td rowspan="2" style="vertical-align: top; width: 25%;">Riwayat Pembayaran</td>
+                <td colspan="3">TRX-20250324-01 | 2025-03-24 04:12:06 | Cash</td>
+                <td style="text-align: right;">Rp 50.000</td>
+            </tr>
+            <tr>
+                <td colspan="3">TRX-20250324-02 | 2025-03-24 05:30:45 | Credit Card</td>
+                <td style="text-align: right;">Rp 25.000</td>
+            </tr>
             <tr>
                 <td colspan="5">
                     <hr>
@@ -294,7 +305,7 @@
             </tr>
             <tr>
                 <td colspan="4">Sisa tagihan</td>
-                <td style="text-align: right;"><?= numberFormatter($datas['total_paid'] - $datas['grand_price']) ?></td>
+                <td style="text-align: right;">Rp 70.000</td>
             </tr>
             <tr>
                 <td colspan="5">
@@ -302,16 +313,10 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="5"><span>Dicetak pada: <?= date('Y-m-d H:i:s') ?></span></td>
+                <td colspan="5"><span>Dicetak pada: 12-12-12 00:00:00</span></td>
             </tr>
         </table>
     </div>
-
-    <!-- <script>
-        window.addEventListener("load", function() {
-            window.print();
-        });
-    </script> -->
 </body>
 
 </html>

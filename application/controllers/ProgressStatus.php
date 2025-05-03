@@ -59,4 +59,17 @@ class ProgressStatus extends CI_Controller
             echo json_encode(['success' => false, 'message' => 'Failed']);
         }
     }
+
+    public function changeStatusTransaction()
+    {
+        $param = $this->input->post();
+
+        $result = $this->ProgressStatusModel->changeStatusTransaction($param);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Success']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed']);
+        }
+    }
 }

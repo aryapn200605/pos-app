@@ -12,6 +12,7 @@
                         <tr>
                             <th class="text-left">Product Name</th>
                             <th>Quantity</th>
+                            <th>Status Pengerjaan</th>
                             <th>Unit Price</th>
                             <th>Total Price</th>
                         </tr>
@@ -21,12 +22,26 @@
                             <tr>
                                 <td class="text-left"><?= $row['product_name']; ?></td>
                                 <td><?= $row['quantity']; ?></td>
+                                <td>
+                                    <?php
+                                        $isDisabled = $this->session->level == 3 || $row['t_status'] == 1;
+                                        $isChecked = $row['t_status'] == 1;
+                                    ?>
+                                    <input type="checkbox"
+                                        class="checkStatus"
+                                        data-id="<?= $row['t_id']; ?>"
+                                        <?= $isChecked ? 'checked' : ''; ?>
+                                        <?= $isDisabled ? 'disabled' : ''; ?>>
+                                </td>
                                 <td class="text-right"><?= numberFormatter($row['unit_price']); ?></td>
                                 <td class="text-right"><?= numberFormatter($row['total_price']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                <div class="text-end mt-2">
+                    <button class="btn btn-primary d-none" id="btn-check">Save</button>
+                </div>
             </div>
         </div>
         <div class="card">
@@ -97,13 +112,16 @@
                     <div class="mb-2 col-12">
                         <label class="mb-2">Action</label><br>
                         <div class="d-flex align-content-start flex-wrap">
-                            <button class="btn btn-primary btn-sm m-1" id="btn-pdf">Download PDF</button>
+                            <!-- <button class="btn btn-primary btn-sm m-1" id="btn-pdf">Download PDF</button> -->
                             <button class="btn btn-success btn-sm m-1" id="btn-print">Print</button>
-                            <button class="btn btn-danger btn-sm m-1" id="btn-delete">Delete</button>
-                            <?php if ($datas['total_paid'] != $datas['grand_price']) : ?>
-                            <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#modal-add-payment">Add Payment</button>
+                            <?php 
+                                if ($this->session->level != '2') :
+                                    if ($datas['total_paid'] != $datas['grand_price']) : ?>
+                                        <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#modal-add-payment">Add Payment</button>
+                                    <?php endif; ?>
+                                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#modal-change-status">Change Progress Status</button>
+                                    <button class="btn btn-danger btn-sm m-1" id="btn-delete">Delete</button>
                             <?php endif; ?>
-                            <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#modal-change-status">Change Progress Status</button>
                         </div>
                     </div>
                 </div>

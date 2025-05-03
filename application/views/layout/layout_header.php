@@ -44,7 +44,7 @@
     <script>
         function showAlert(type, message, position = 'top-right') {
             alertify.set('notifier', 'position', position);
-            alertify[type](message);
+            alertify[type](message, "Information");
         }
 
         window.baseURL = "<?php echo site_url(); ?>";

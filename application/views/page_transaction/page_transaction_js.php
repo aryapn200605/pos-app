@@ -2,6 +2,8 @@
     $(document).ready(function() {
         app.setTitle(<?= json_encode($title); ?>);
 
+        var selectedIds = [];
+
         const table = new DataTable('#transaction-table', {
             ajax: {
                 url: baseURL + '/Transaction/getTransaction',
@@ -33,11 +35,11 @@
                     title: 'Customer Name',
                     className: 'text-center',
                 },
-                {
-                    data: 'customer_phone',
-                    title: 'Phone Number',
-                    className: 'text-center',
-                },
+                // {
+                //     data: 'customer_phone',
+                //     title: 'Phone Number',
+                //     className: 'text-center',
+                // },
                 {
                     data: 'order_id',
                     title: 'Order ID',
@@ -48,16 +50,16 @@
                     title: 'Deadline',
                     className: 'text-center',
                 },
-                {
-                    data: 'created_at',
-                    title: 'Date',
-                    className: 'text-center',
-                },
-                {
-                    data: 'cashier',
-                    title: 'Cashier',
-                    className: 'text-center',
-                },
+                // {
+                //     data: 'created_at',
+                //     title: 'Date',
+                //     className: 'text-center',
+                // },
+                // {
+                //     data: 'cashier',
+                //     title: 'Cashier',
+                //     className: 'text-center',
+                // },
                 {
                     data: null,
                     title: 'Payment Status',
@@ -70,14 +72,14 @@
                         return `<span class="badge badge-${status ? 'success' : 'danger'}">${status ? 'Paid' : 'Unpaid'}</span>`;
                     }
                 },
-                {
-                    data: null,
-                    title: 'Progress Status',
-                    className: 'text-center',
-                    render: function(data, type, row) {
-                        return `<span class="badge badge-${badgeProgressStatus(row.status)}">${row.status}</span>`;
-                    }
-                },
+                // {
+                //     data: null,
+                //     title: 'Progress Status',
+                //     className: 'text-center',
+                //     render: function(data, type, row) {
+                //         return `<span class="badge badge-${badgeProgressStatus(row.status)}">${row.status}</span>`;
+                //     }
+                // },
                 {
                     data: null,
                     title: 'Action',
@@ -228,6 +230,42 @@
                 },
                 function() {});
         });
+
+        $('.checkStatus').on('change', function () {
+            selectedIds = [];
+
+            $('.checkStatus:checked').each(function () {
+                var id = $(this).data('id');
+                selectedIds.push(id);
+            });
+
+            if (selectedIds.length > 0) {
+                $('#btn-check').removeClass('d-none');
+            } else {
+                $('#btn-check').addClass('d-none');
+            }
+        });
+
+        $('#btn-check').on('click', function() {
+            console.log(selectedIds)
+            $.ajax({
+                url: baseURL + '/ProgressStatus/changeStatusTransaction',
+                type: 'POST',
+                data: {
+                    status: selectedIds
+                },
+                success: (response) => {
+                    const res = JSON.parse(response)
+
+                    if (res.success) {
+                        showAlert('success', res.message)
+                        app.goToModule('/Transaction/getDetail?tb_id=' + $('#detail_id').val())
+                    } else {
+                        showAlert('error', res.message)
+                    }
+                },
+            })
+        })
 
         function fetchData(url, elementId, defaultText, prefix) {
             $.ajax({
