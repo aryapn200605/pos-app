@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - C:/program-pos/pos-app:/var/www/html
+      - C:/Program-project/pos-app:/var/www/html
     depends_on:
       - db
     environment:
